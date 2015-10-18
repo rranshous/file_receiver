@@ -1,0 +1,7 @@
+simple file receiver
+
+file can be POST'd and is written to the /data folder (which hopefully you map)
+
+single threaded, highly almost nothing
+
+docker run --restart="always" -d -p 8080:80 -v /where/i/want/data:/data --name="file_receiver" rranshous/file_receiver
