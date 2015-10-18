@@ -10,4 +10,5 @@ post '/:name' do |name|
   FileUtils.mkdir_p File.dirname(out_path)
   request.body.rewind
   File.write(out_path, request.body.read)
+  "success"
 end
