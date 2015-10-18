@@ -7,5 +7,4 @@ RUN bundle install
 
 EXPOSE 80
 
-ENTRYPOINT ["bundle", "exec", "ruby", "app.rb",
-            "/data", "-p", "80", "-o", "0.0.0.0"]
+ENTRYPOINT ["bundle", "exec", "ruby", "app.rb", "/data", "-p", "80", "-o", "0.0.0.0"]
