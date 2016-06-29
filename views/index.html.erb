@@ -1,0 +1,23 @@
+<html><head></head><body>
+
+    <h3>Existing files</h3>
+    <table>
+      <% @files.each do |file_name| %>
+          <tr><td>
+              <a href="/<%=file_name%>"><%=file_name%></a>
+              </td><td>
+              <form action="/<%=file_name%>" method="POST">
+                <input type="hidden" name="_method" value="DELETE"/>
+                <input type="submit" name="Delete" value="Delete"/>
+              </form>
+          </td></tr>
+      <% end %>
+    </table>
+
+    <h3>Upload new file</h3>
+    <form action="/form_file_upload" method="POST" enctype="multipart/form-data">
+      <input type="file" name="file">
+      <input type="submit" name="submit" value="upload"/>
+    </form>
+
+</body></html>
