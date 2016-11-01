@@ -29,7 +29,7 @@ end
 get '/' do
   @files = Dir[File.join(settings.data_path,'*')]
             .map{|n| File.basename n }
-            .map{|n| Base64.urlsafe_decode64(n) rescue nil }
+            .map{|n| Base64.urlsafe_decode64(n) rescue n }
             .compact
   erb :"index.html"
 end
@@ -46,24 +46,36 @@ end
 
 get '/*' do |name|
   encoded_name = Base64.urlsafe_encode64 name
-  file_path = File.join(settings.data_path, encoded_name)
+  encoded_file_path = File.join(settings.data_path, encoded_name)
+  file_path = File.join(settings.data_path, name)
   puts "reading #{file_path}"
-  if !File.exists? file_path
-    puts "can't read, does not exist: #{file_path}"
-    halt 404
+  if !File.exists? encoded_file_path
+    if !File.exists? file_path
+      puts "can't read, does not exist: #{file_path}"
+      halt 404
+    else
+      send_file file_path
+    end
+  else
+    send_file encoded_file_path
   end
-  send_file file_path
 end
 
 delete '/*' do |name|
   encoded_name = Base64.urlsafe_encode64 name
-  file_path = File.join(settings.data_path, encoded_name)
+  encoded_file_path = File.join(settings.data_path, encoded_name)
+  file_path = File.join(settings.data_path, name)
   puts "deleting: #{file_path}"
-  if !File.exists? file_path
-    puts "can't delete, does not exist: #{file_path}"
-    halt 404
+  if !File.exists? encoded_file_path
+    if !File.exists? file_path
+      puts "can't delete, does not exist: #{encoded_file_path}"
+      halt 404
+    else
+      File.unlink file_path
+    end
+  else
+    File.unlink encoded_file_path
   end
-  File.unlink file_path
   "success"
 end
 
